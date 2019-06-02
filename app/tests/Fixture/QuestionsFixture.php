@@ -39,14 +39,14 @@ class QuestionsFixture extends TestFixture
             [
                 'id' => 1,
                 'user_id' => 1,
-                'body' => '好きなPHPのフレームワークは何ですか？',
+                'body' => '好きな飲み物は何ですか？',
                 'created' => '2018-12-01 13:00:00',
                 'modified' => '2018-12-01 13:00:00',
             ],
             [
                 'id' => 2,
                 'user_id' => 2,
-                'body' => '好きなPHPの関数は何ですか？',
+                'body' => '最近した軽い運動は何ですか？',
                 'created' => '2018-12-02 14:00:00',
                 'modified' => '2018-12-02 14:00:00',
             ],

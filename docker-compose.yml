@@ -13,7 +13,7 @@ services:
       - DATABASE_HOST=undo-bbs-db
       - DATABASE_USER=root
       - DATABASE_PASS=root
-      - DATABASE_NAME=qa_app
+      - DATABASE_NAME=qc_app
       - DATABASE_TEST_URL=mysql://root:secret@undo-bbs-db/test
     command: bash -c "sh docker-init-setup.sh && apache2-foreground"
     ports:

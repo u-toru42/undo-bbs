@@ -14,7 +14,6 @@ class LoginController extends AppController
      */
     public function index()
     {
-        // 正誤表参照 @see https://github.com/php-book/php-qa-plaza/wiki
         // if ($this->Auth->isAuthorized()) {
 
         if ($this->Auth->user()) {

@@ -43,17 +43,17 @@ class UsersFixture extends TestFixture
         $this->records = [
             [
                 'id' => 1,
-                'username' => 'itosho',
-                'password' => $hasher->hash('password1'),
-                'nickname' => 'いとしょ',
+                'username' => 'test1',
+                'password' => $hasher->hash('test1'),
+                'nickname' => 'テスト1',
                 'created' => '2018-12-01 10:00:00',
                 'modified' => '2018-12-01 10:00:00',
             ],
             [
                 'id' => 2,
-                'username' => 'fortkle',
-                'password' => $hasher->hash('password2'),
-                'nickname' => 'ふくあき',
+                'username' => 'test2',
+                'password' => $hasher->hash('test2'),
+                'nickname' => 'テスト2',
                 'created' => '2018-12-02 10:00:00',
                 'modified' => '2018-12-02 10:00:00',
             ],
