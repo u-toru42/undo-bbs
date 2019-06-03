@@ -1,10 +1,10 @@
 <?php
 namespace App\Test\TestCase\Controller;
 
-use App\Controller\AnswersController;
-use App\Model\Entity\Answer;
+use App\Controller\CommentsController;
+use App\Model\Entity\Comment;
 use App\Model\Entity\Question;
-use App\Model\Table\AnswersTable;
+use App\Model\Table\CommentsTable;
 use App\Model\Table\QuestionsTable;
 use App\Test\TestSuite\LoginTrait;
 use Cake\Chronos\Chronos;
@@ -12,17 +12,17 @@ use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestCase;
 
 /**
- * App\Controller\AnswersController Test Case
+ * App\Controller\CommentsController Test Case
  *
- * @property AnswersTable $Answers
+ * @property CommentsTable $Comments
  * @property QuestionsTable $Questions
  */
-class AnswersControllerTest extends IntegrationTestCase
+class CommentsControllerTest extends IntegrationTestCase
 {
     use LoginTrait;
 
-    /** @var AnswersTable */
-    public $Answers;
+    /** @var CommentsTable */
+    public $Comments;
 
     /** @var  */
     public $Questions;
@@ -33,7 +33,7 @@ class AnswersControllerTest extends IntegrationTestCase
      * @var array
      */
     public $fixtures = [
-        'app.answers',
+        'app.comments',
         'app.questions',
         'app.users',
     ];
@@ -45,7 +45,7 @@ class AnswersControllerTest extends IntegrationTestCase
     {
         parent::setUp();
 
-        $this->Answers = TableRegistry::getTableLocator()->get('Answers');
+        $this->Comments = TableRegistry::getTableLocator()->get('Comments');
         $this->Questions = TableRegistry::getTableLocator()->get('Questions');
     }
 
@@ -54,7 +54,7 @@ class AnswersControllerTest extends IntegrationTestCase
      */
     public function tearDown()
     {
-        unset($this->Answers);
+        unset($this->Comments);
         unset($this->Questions);
 
         parent::tearDown();
@@ -72,12 +72,12 @@ class AnswersControllerTest extends IntegrationTestCase
 
         $data = [
             'question_id' => $targetQuestionId,
-            'body' => '私、わかりますよ！',
+            'body' => '私、やったことあります！',
         ];
 
         $this->readyToPost();
 
-        $this->post('/answers/add', $data);
+        $this->post('/comments/add', $data);
 
         $this->assertRedirect(
             [
@@ -101,26 +101,26 @@ class AnswersControllerTest extends IntegrationTestCase
      */
     public function testAddCreateContent()
     {
-        $beforeAnswerCount = $this->Answers->find()->count();
+        $beforeCommentCount = $this->Comments->find()->count();
         $question = $this->Questions->find()->first();
         $targetQuestionId = $question->id;
 
         $data = [
             'question_id' => $targetQuestionId,
-            'body' => '私、わかりますよ！',
+            'body' => '私、やったことあります！',
         ];
 
         $this->readyToPost();
 
-        $this->post('/answers/add', $data);
+        $this->post('/comments/add', $data);
 
         $this->assertSame(
-            $beforeAnswerCount + 1,
-            $this->Answers->find()->count(),
+            $beforeCommentCount + 1,
+            $this->Comments->find()->count(),
             '回答が新規に保存されていない'
         );
-        /** @var Answer $actual */
-        $actual = $this->Answers->find()->last();
+        /** @var Comment $actual */
+        $actual = $this->Comments->find()->last();
         $this->assertSame(
             $actual->extract(['question_id', 'body']),
             $data,
@@ -140,7 +140,7 @@ class AnswersControllerTest extends IntegrationTestCase
      */
     public function testAddError()
     {
-        $beforeAnswerCount = $this->Answers->find()->count();
+        $beforeCommentCount = $this->Comments->find()->count();
         $question = $this->Questions->find()->first();
 
         $data = [
@@ -150,7 +150,7 @@ class AnswersControllerTest extends IntegrationTestCase
 
         $this->readyToPost();
 
-        $this->post('/answers/add', $data);
+        $this->post('/comments/add', $data);
 
         $this->assertRedirect(
             [
@@ -167,8 +167,8 @@ class AnswersControllerTest extends IntegrationTestCase
         );
 
         $this->assertSame(
-            $beforeAnswerCount,
-            $this->Answers->find()->count(),
+            $beforeCommentCount,
+            $this->Comments->find()->count(),
             '回答の新規保存を防げていない'
         );
     }
@@ -182,17 +182,17 @@ class AnswersControllerTest extends IntegrationTestCase
     {
         /** @var Question $question */
         $question = $this->Questions->find()->first();
-        $this->setupAnswersToUpperLimit($question);
+        $this->setupCommentsToUpperLimit($question);
         $targetQuestionId = $question->id;
 
         $data = [
             'question_id' => $targetQuestionId,
-            'body' => '私、わかりますよ！',
+            'body' => '私、やったことがあります！',
         ];
 
         $this->readyToPost();
 
-        $this->post('/answers/add', $data);
+        $this->post('/comments/add', $data);
 
         $this->assertRedirect(
             [
@@ -209,8 +209,8 @@ class AnswersControllerTest extends IntegrationTestCase
         );
 
         $this->assertSame(
-            AnswersController::ANSWER_UPPER_LIMIT,
-            $this->Answers->find()->count(),
+            CommentsController::COMMENT_UPPER_LIMIT,
+            $this->Comments->find()->count(),
             '回答の新規保存を防げていない'
         );
     }
@@ -222,18 +222,18 @@ class AnswersControllerTest extends IntegrationTestCase
      */
     public function testAddErrorQuestionNotExits()
     {
-        $beforeAnswerCount = $this->Answers->find()->count();
+        $beforeCommentCount = $this->Comments->find()->count();
         $latestQuestion = $this->Questions->find()->last();
         $targetQuestionId = $latestQuestion->id + 1;
 
         $data = [
             'question_id' => $targetQuestionId,
-            'body' => '私、知っています！'
+            'body' => '私、やったことがあります！'
         ];
 
         $this->readyToPost();
 
-        $this->post('/answers/add', $data);
+        $this->post('/comments/add', $data);
 
         $this->assertRedirect(
             [
@@ -250,8 +250,8 @@ class AnswersControllerTest extends IntegrationTestCase
         );
 
         $this->assertSame(
-            $beforeAnswerCount,
-            $this->Answers->find()->count(),
+            $beforeCommentCount,
+            $this->Comments->find()->count(),
             '回答の新規保存を防げていない'
         );
     }
@@ -262,16 +262,16 @@ class AnswersControllerTest extends IntegrationTestCase
      * @param Question $targetQuestion
      * @return void
      */
-    private function setupAnswersToUpperLimit($targetQuestion)
+    private function setupCommentsToUpperLimit($targetQuestion)
     {
-        $existsCount = $this->Answers->find()
+        $existsCount = $this->Comments->find()
             ->where(['question_id' => $targetQuestion->id])
             ->count();
 
-        $query = $this->Answers->query();
+        $query = $this->Comments->query();
         $query->insert(['question_id', 'user_id', 'body', 'created', 'modified']);
         $now = Chronos::now();
-        for ($i = $existsCount + 1; $i <= AnswersController::ANSWER_UPPER_LIMIT; $i++) {
+        for ($i = $existsCount + 1; $i <= CommentsController::COMMENT_UPPER_LIMIT; $i++) {
             $query->values([
                 'question_id' => $targetQuestion->id,
                 'user_id' => $targetQuestion->user_id,
@@ -293,18 +293,18 @@ class AnswersControllerTest extends IntegrationTestCase
     {
         $this->readyToPost();
 
-        /** @var Answer $targetAnswer */
-        $targetAnswer = $this->Answers->find()
+        /** @var Comment $targetComment */
+        $targetComment = $this->Comments->find()
             ->where(['user_id' => $this->_session['Auth']['User']['id']])
             ->first();
 
-        $this->post("/answers/delete/{$targetAnswer->id}");
+        $this->post("/comments/delete/{$targetComment->id}");
 
         $this->assertRedirect(
             [
                 'controller' => 'Questions',
                 'action' => 'view',
-                $targetAnswer->question_id,
+                $targetComment->question_id,
             ],
             '回答削除完了時にリダイレクトが正しくかかっていない'
         );
@@ -314,10 +314,10 @@ class AnswersControllerTest extends IntegrationTestCase
             '回答投削除功時のメッセージが正しくセットされていない'
         );
 
-        $targetAnswer = $this->Answers->find()
-            ->where(['id' => $targetAnswer->id]);
+        $targetComment = $this->Comments->find()
+            ->where(['id' => $targetComment->id]);
         $this->assertTrue(
-            $targetAnswer->isEmpty(),
+            $targetComment->isEmpty(),
             '回答が削除されていない'
         );
     }
@@ -327,24 +327,24 @@ class AnswersControllerTest extends IntegrationTestCase
      *
      * @return void
      */
-    public function testDeleteNotOwnedAnswer()
+    public function testDeleteNotOwnedComment()
     {
-        $beforeAnswerCount = $this->Answers->find()->count();
+        $beforeCommentCount = $this->Comments->find()->count();
 
         $this->readyToPost();
 
-        /** @var Answer $targetAnswer */
-        $targetAnswer = $this->Answers->find()
+        /** @var Comment $targetComment */
+        $targetComment = $this->Comments->find()
             ->where(['user_id !=' => $this->_session['Auth']['User']['id']])
             ->first();
 
-        $this->post("/answers/delete/{$targetAnswer->id}");
+        $this->post("/comments/delete/{$targetComment->id}");
 
         $this->assertRedirect(
             [
                 'controller' => 'Questions',
                 'action' => 'view',
-                $targetAnswer->question_id,
+                $targetComment->question_id,
             ],
             '回答削除失敗時にリダイレクトが正しくかかっていない'
         );
@@ -355,8 +355,8 @@ class AnswersControllerTest extends IntegrationTestCase
         );
 
         $this->assertSame(
-            $beforeAnswerCount,
-            $this->Answers->find()->count(),
+            $beforeCommentCount,
+            $this->Comments->find()->count(),
             '回答の新規保存を防げていない'
         );
     }
@@ -368,11 +368,11 @@ class AnswersControllerTest extends IntegrationTestCase
      */
     public function testDeleteNotExists()
     {
-        $targetAnswerId = $this->Answers->find()->last()->id + 1;
+        $targetCommentId = $this->Comments->find()->last()->id + 1;
 
         $this->readyToPost();
 
-        $this->post("/answers/delete/{$targetAnswerId}");
+        $this->post("/comments/delete/{$targetCommentId}");
 
         $this->assertResponseCode(
             404,
