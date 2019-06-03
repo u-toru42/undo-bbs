@@ -2,7 +2,7 @@
 
 namespace App\Test\TestCase\Controller;
 
-use App\Model\Entity\Answer;
+use App\Model\Entity\Comment;
 use App\Model\Entity\Question;
 use App\Model\Entity\User;
 use App\Model\Table\QuestionsTable;
@@ -28,7 +28,7 @@ class QuestionsControllerTest extends IntegrationTestCase
      * @var array
      */
     public $fixtures = [
-        'app.Answers',
+        'app.Comments',
         'app.Questions',
         'app.Users',
     ];
@@ -83,7 +83,7 @@ class QuestionsControllerTest extends IntegrationTestCase
         );
         $this->assertInternalType(
             'integer',
-            $sampleQuestion->answered_count,
+            $sampleQuestion->commented_count,
             '質問に回答数が付いていない'
         );
     }
@@ -117,24 +117,24 @@ class QuestionsControllerTest extends IntegrationTestCase
             '指定した質問が取得されていない'
         );
 
-        /** @var ResultSet $actualAnswers */
-        $actualAnswers = $this->viewVariable('answers');
+        /** @var ResultSet $actualComments */
+        $actualComments = $this->viewVariable('comments');
         $this->assertContainsOnlyInstancesOf(
-            Answer::class,
-            $actualAnswers->toList(),
+            Comment::class,
+            $actualComments->toList(),
             '回答一覧が正しくビュー変数にセットされていない'
         );
         $this->assertInstanceOf(
             User::class,
-            $actualAnswers->sample(1)->first()->user,
+            $actualComments->sample(1)->first()->user,
             '回答者情報がセットされていない'
         );
 
-        /** @var Answer $actualAnswer */
-        $actualAnswer = $this->viewVariable('newAnswer');
+        /** @var Comment $actualComment */
+        $actualComment = $this->viewVariable('newComment');
         $this->assertInstanceOf(
-            Answer::class,
-            $actualAnswer,
+            Comment::class,
+            $actualComment,
             '回答情報が正しくセットされていない'
         );
     }
