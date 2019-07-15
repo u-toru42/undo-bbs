@@ -42,16 +42,16 @@ class CommentsFixture extends TestFixture
                 'question_id' => 1,
                 'user_id' => 1,
                 'body' => '麦茶です！',
-                'created' => '2018-12-01 13:30:00',
-                'modified' => '2018-12-01 13:30:00',
+                'created' => '2019-07-01 00:00:00',
+                'modified' => '2019-07-01 00:00:00',
             ],
             [
                 'id' => 2,
-                'question_id' => 1,
+                'question_id' => 2,
                 'user_id' => 2,
                 'body' => '一日10分のジョギングです',
-                'created' => '2018-12-02 14:30:00',
-                'modified' => '2018-12-02 14:30:00',
+                'created' => '2019-07-02 00:00:00',
+                'modified' => '2019-07-02 00:00:00',
             ],
         ];
         parent::init();
