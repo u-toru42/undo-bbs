@@ -1,5 +1,5 @@
-CREATE DATABASE qa_app;
-use qa_app;
+CREATE DATABASE qc_app;
+use qc_app;
 
 CREATE TABLE `comments` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
