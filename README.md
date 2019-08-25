@@ -17,5 +17,5 @@
 合わせて、簡単なデモ（使用例）などスクリーンショットやGIFアニメで表示
 
 # References
-[PHPプロフェッショナル開発 秀和システム](https://www.shuwasystem.co.jp/book/9784798047492.html).<br>
-[独習PHP 第3版](https://www.shoeisha.co.jp/book/detail/9784798135472).<br>
+[PHPプロフェッショナル開発 秀和システム](https://www.shuwasystem.co.jp/book/9784798047492.html)<br>
+[独習PHP 第3版](https://www.shoeisha.co.jp/book/detail/9784798135472)<br>
