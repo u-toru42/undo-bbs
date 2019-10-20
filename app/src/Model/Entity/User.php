@@ -32,8 +32,8 @@ class User extends Entity
      * パスワードをハッシュ化する
      *
      * @param string $value 生パスワード
-     * @return bool|string ハッシュ化されたパスワード
-     */
+     * @return bool|string ハッシュ化されたパスワード     */
+    // 　ハッシュ化とは...元のデータから一定の計算手順に従ってハッシュ値と呼ばれる規則性のない固定長の値を求め、その値によって元のデータを書き換えること。ハッシュ化のロジックを自前で実装するのは危険なため、CakePHPのハッシュ用のメソッドを利用する。
     protected function _setPassword($value)
     {
         if (strlen($value)) {

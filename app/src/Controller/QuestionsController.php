@@ -44,7 +44,7 @@ class QuestionsController extends AppController
         // フォーム画面を表示させるにはEntityオブジェクトを作成し、それをビューに渡す。
         $question = $this->Questions->newEntity();
 
-        if ($this->request->is('post')) {}
+        if ($this->request->is('post')) {
             // フォームの内容を取得、patchEntity()というメソッドを使い、既存のEntityにマージする。
             $question = $this->Questions->patchEntity($question, $this->request->getData());
 
