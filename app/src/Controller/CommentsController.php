@@ -14,6 +14,7 @@ class CommentsController extends AppController
     /**
      * {@inheritdoc}
      */
+    // AnswersControllerクラスのadd()アクションはQuestionsControllerクラスのaddアクションとは異なり、GETでアクセスする必要は無い。そのため、beforeFilter()メソッド内でallowMethod()を利用して、アクセス可能なHTTPのリクエストメソッドを限定する。
     public function beforeFilter(Event $event)
     {
         parent::beforeFilter($event);
@@ -27,6 +28,7 @@ class CommentsController extends AppController
      */
     public function add()
     {
+        // count()メソッドを利用し、件数のチェックを行う。
         $comment = $this->Comments->newEntity($this->request->getData());
         $count = $this->Comments
             ->find()
@@ -57,6 +59,7 @@ class CommentsController extends AppController
      */
     public function delete(int $id)
     {
+        // まず始めにallowMethod()でPOSTだけのアクセスを受け入れるようにする。その後、指定されたIDの質問をget()メソッドで取得する。質問が存在しない場合は404エラーとなる。そして、取得した質問をdelete()メソッドで削除している。質問欄も同様。
         $Comment = $this->Comments->get($id);
         $questionId = $Comment->question_id;
         if ($comment->user_id !== $this->Auth->user('id')) {

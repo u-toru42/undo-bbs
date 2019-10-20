@@ -43,7 +43,7 @@
         <?php endforeach; ?>
     <?php endif; ?>
 </section>
-
+<!-- コメントは100件以上は表示できないようにする。-->
 <section class="comment-post mb-5">
     <h2 class="mb-3"><i class="fas fa-comment-dots"></i> コメントする</h2>
     <?php if ($this->request->getSession()->read('Auth.User.id')): ?>

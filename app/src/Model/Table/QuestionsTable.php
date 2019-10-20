@@ -3,6 +3,7 @@
 namespace App\Model\Table;
 
 use Cake\ORM\Table;
+// バリデーションルールを定義する。
 use Cake\Validation\Validator;
 
 /**
@@ -39,16 +40,21 @@ class QuestionsTable extends Table
      * @param \Cake\Validation\Validator $validator バリデーションインスタンス
      * @return \Cake\Validation\Validator バリデーションインスタンス
      */
+    // バリデーションルールはvalidationDefault()メソッドに定義する。
     public function validationDefault(Validator $validator)
     {
         $validator
             ->nonNegativeInteger('id', 'IDが不正です')
             ->allowEmpty('id', 'create', 'IDが不正です');
 
+        //bodyのバリデーションルールは1.scalar()値であること。単一のデータを示す。PHPにはboolean型、integer型、double型、string型のこと。
         $validator
             ->scalar('body', '質問内容が不正です')
+            // 2.requirePresence()はキーが存在していること。第2引数にcreateを指定することで、新規登録時のみルールが適用される。
             ->requirePresence('body', 'create', '質問内容が不正です')
+            // 3.notEmpty()、値が空でないこと。
             ->notEmpty('body', '質問内容は必ず入力してください')
+            // 4.maxLength()、指定した文字列以内であること。今回は140文字という設定。
             ->maxLength('body', 140, '質問内容は140字以内で入力してください');
 
         return $validator;

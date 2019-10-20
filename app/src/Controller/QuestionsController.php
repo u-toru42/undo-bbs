@@ -13,6 +13,7 @@ class QuestionsController extends AppController
     public function initialize()
     {
         parent::initialize();
+        // loadModel()メソッドを利用することで、Commentsモデルの利用が可能となる。
         $this->loadModel('Comments');
     }
 
@@ -23,6 +24,8 @@ class QuestionsController extends AppController
      */
     public function index()
     {
+        // ここに処理を書いていく
+        // paginateメソッドはページング(ページ分割)された情報を取得するメソッドです。
         $questions = $this->paginate($this->Questions->findQuestionsWithCommentedCount()->contain(['Users']), [
             'order' => ['Questions.id' => 'DESC']
         ]);
@@ -35,16 +38,20 @@ class QuestionsController extends AppController
      *
      * @return \Cake\Http\Response|null 質問投稿後に質問一覧画面へ遷移する
      */
+    // add()アクションはGETメソッドでアクセスされた時はフォーム画面を表示し、POSTメソッドでアクセスされた時(=フォームをsubmitした時)はフォームの内容をデータベースに保存する。
     public function add()
     {
+        // フォーム画面を表示させるにはEntityオブジェクトを作成し、それをビューに渡す。
         $question = $this->Questions->newEntity();
 
-        if ($this->request->is('post')) {
+        if ($this->request->is('post')) {}
+            // フォームの内容を取得、patchEntity()というメソッドを使い、既存のEntityにマージする。
             $question = $this->Questions->patchEntity($question, $this->request->getData());
 
             $question->user_id = $this->Auth->user('id');
 
             if ($this->Questions->save($question)) {
+                // Flashコンポーネントは、フォームの処理結果を一回だけ通知するような時に使う。
                 $this->Flash->success('質問を投稿しました');
 
                 return $this->redirect(['action' => 'index']);
@@ -63,6 +70,7 @@ class QuestionsController extends AppController
      */
     public function view(int $id)
     {
+        // 最初にパスで指定した質問IDの情報を取得する。get()メソッドはfind()メソッドとは異なり、quesitonテーブルに存在しないIDを指定した場合は404エラーとなる。
         $question = $this->Questions->get($id, ['contain' => ['Users']]);
 
         $comments = $this
@@ -71,9 +79,10 @@ class QuestionsController extends AppController
             ->where(['Comments.question_id' => $id])
             ->contain(['Users'])
             ->orderAsc('Comments.id')
+            // コメントに関しては1つの質問につき100件という制限を設計時に設けたため、find()->all()で全件取得する。
             ->all();
 
-        $newComment = $this->Comments->newEntity();
+        $newComment = $this->Comments->newEntity(); // CommentのEntityオブジェクトを生成し、ビューに渡す。ビューは回答一覧を表示しているsectionタグの直下に回答投稿フォームを設置する。
 
         $this->set(compact('question', 'comments', 'newComment'));
     }
@@ -86,6 +95,7 @@ class QuestionsController extends AppController
      */
     public function delete(int $id)
     {
+        // まず始めにallowMethod()でPOSTだけのアクセスを受け入れるようにする。その後、指定されたIDの質問をget()メソッドで取得する。質問が存在しない場合は404エラーとなる。そして、取得した質問をdelete()メソッドで削除している。
         $this->request->allowMethod(['post']);
 
         $question = $this->Questions->get($id);
