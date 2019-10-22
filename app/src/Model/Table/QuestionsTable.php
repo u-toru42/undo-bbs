@@ -27,7 +27,7 @@ class QuestionsTable extends Table
         $this->hasMany('Comments', [
             'foreignKey' => 'question_id'
         ]);
-
+        // 質問一覧を表示する際に、どのユーザーがその質問やコメントを投稿していたかがわかるようにする。アソシエーションを利用して、モデル同士を関連付ける。
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id',
             'joinType' => 'INNER'

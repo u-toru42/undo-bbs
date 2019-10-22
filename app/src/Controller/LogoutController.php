@@ -24,7 +24,7 @@ class LogoutController extends AppController
     public function index()
     {
         $this->Flash->success('ログアウトしました');
-
+        // logoutメソッドは戻り値としてログアウト時のリダイレクト情報を返すことを利用し、ログイン画面に遷移する。
         return $this->redirect($this->Auth->logout());
     }
 }

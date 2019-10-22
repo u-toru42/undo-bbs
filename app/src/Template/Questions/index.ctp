@@ -24,6 +24,7 @@
                         <i class="fas fa-comment-dots"></i> <?= $this->Number->format($question->commented_count) ?>
                     </small>
                 </p>
+                <!-- 本人の投稿した質問でないと、質問一覧画面の質問削除のリンクは表示されないようにする。　ログイン中のユーザーIDと質問のユーザーIDを比較し、リンクの表示制御を行う。未ログインの場合はNULLになるが、質問のユーザーIDがNULLになることはない。-->
                 <?= $this->Html->link('詳細へ', ['action' => 'view', $question->id], ['class' => 'card-link']) ?>
                 <?php if ($this->request->getSession()->read('Auth.User.id') === $question->user_id): ?>
                     <?= $this->Form->postLink('削除する', ['action' => 'delete', $question->id],

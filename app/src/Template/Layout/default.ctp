@@ -42,6 +42,7 @@
             </button>
 
             <div class="collapse navbar-collapse" id="Navber">
+                <!-- ログイン中のユーザーIDは$this->request->getSession()->read('Auth.User.id')で取得することができる。この値の存在チェックをすることで、ログイン状況に応じて出し分けを行うことができる。-->
                 <?php if ($this->request->getSession()->read('Auth.User.id')): ?>
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item">

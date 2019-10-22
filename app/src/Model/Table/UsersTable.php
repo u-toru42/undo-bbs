@@ -41,6 +41,7 @@ class UsersTable extends Table
             ->requirePresence('username', 'create', 'ユーザー名が不正です')
             ->notEmpty('username', 'ユーザー名は必ず入力してください')
             ->maxLength('username', 10, 'ユーザー名は10文字以内で入力してください')
+            // CakePHPのデフォルトで用意されている同名のバリデーションメソッドが日本語に対応しておらず、正しくバリデーションできないため、カスタムバリデーションとして正規表現で半角英数であることをチェックしている。
             ->add('username', 'alphaNumeric', [
                 'rule' => function ($value) {
                     $pattern = '/\A[a-zA-Z0-9]+\z/';
@@ -65,6 +66,7 @@ class UsersTable extends Table
             ->requirePresence('password', 'create', 'パスワードが不正です')
             ->notEmpty('password', 'パスワードは必ず入力してください')
             ->lengthBetween('password', [8, 16], 'パスワードは8文字以上16文字以内で入力してください')
+            // securePasswordで独自のバリデーションルールを定義している。正規表現を利用して半角英数字混在かで現在のパスワードと同様か判定している。
             ->add('password', 'securePassword', [
                 'rule' => function ($value) {
                     $pattern = '/\A([a-zA-Z]+(?=[0-9])|[0-9]+(?=[a-zA-Z]))[0-9a-zA-Z]+\z/';
@@ -82,11 +84,13 @@ class UsersTable extends Table
 
         $validator
             ->add(
+                // password_current,checkなどでカスタムバリデーションとしてruleにクロージャー(関数とその関数が作られた環境の2つが1体となった特殊なオブジェクト)を与える。
                 'password_current',
                 'check',
                 [
                     'rule' => function ($value, $context) {
                         $user = $this->get($context['data']['id']);
+                        // check()メソッドを利用し、現在のパスワードと同様かどうかの判定を行う。
                         if ((new DefaultPasswordHasher)->check($value, $user->password)) {
                             return true;
                         }

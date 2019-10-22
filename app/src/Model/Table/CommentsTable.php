@@ -7,7 +7,7 @@ use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
 /**
- * Answers Model
+ * Comments Model
  */
 class CommentsTable extends Table
 {
@@ -28,7 +28,8 @@ class CommentsTable extends Table
             'foreignKey' => 'question_id',
             'joinType' => 'INNER'
         ]);
-
+        
+        // 質問一覧を表示する際に、どのユーザーがその質問やコメントを投稿していたかがわかるようにする。アソシエーションを利用して、モデル同士を関連付ける。
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id',
             'joinType' => 'INNER'

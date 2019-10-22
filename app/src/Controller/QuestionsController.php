@@ -25,7 +25,7 @@ class QuestionsController extends AppController
     public function index()
     {
         // ここに処理を書いていく
-        // paginateメソッドはページング(ページ分割)された情報を取得するメソッドです。
+        // paginateメソッドはページング(ページ分割)された情報を取得するメソッド。
         $questions = $this->paginate($this->Questions->findQuestionsWithCommentedCount()->contain(['Users']), [
             'order' => ['Questions.id' => 'DESC']
         ]);
@@ -47,7 +47,7 @@ class QuestionsController extends AppController
         if ($this->request->is('post')) {
             // フォームの内容を取得、patchEntity()というメソッドを使い、既存のEntityにマージする。
             $question = $this->Questions->patchEntity($question, $this->request->getData());
-
+            // ユーザーIDの値を動的に行う。
             $question->user_id = $this->Auth->user('id');
 
             if ($this->Questions->save($question)) {
@@ -70,7 +70,7 @@ class QuestionsController extends AppController
      */
     public function view(int $id)
     {
-        // 最初にパスで指定した質問IDの情報を取得する。get()メソッドはfind()メソッドとは異なり、quesitonテーブルに存在しないIDを指定した場合は404エラーとなる。
+        // 最初にパスで指定した質問IDの情報を取得する。get()メソッドはfind()メソッドとは異なり、quesitonテーブルに存在しないIDを指定した場合は404エラーとなる。contain()メソッド質問情報と併せて、ユーザー情報を取得することができる。
         $question = $this->Questions->get($id, ['contain' => ['Users']]);
 
         $comments = $this
@@ -97,7 +97,7 @@ class QuestionsController extends AppController
     {
         // まず始めにallowMethod()でPOSTだけのアクセスを受け入れるようにする。その後、指定されたIDの質問をget()メソッドで取得する。質問が存在しない場合は404エラーとなる。そして、取得した質問をdelete()メソッドで削除している。
         $this->request->allowMethod(['post']);
-
+        // 質問及びコメントの削除は本人しか削除できないようにする。
         $question = $this->Questions->get($id);
         if ($question->user_id !== $this->Auth->user('id')) {
             $this->Flash->error('他のユーザーの質問を削除することは出来ません');

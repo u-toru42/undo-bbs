@@ -33,6 +33,7 @@
                     <p class="card-text"><?= nl2br(h($comment->body)) ?></p>
                     <p class="card-subtitle mb-2 text-muted">
                         <small><?= h($comment->created) ?></small>
+                        <!-- ログイン中のユーザーIDと書き込むIDを比較して、リンクの表示制御を行う。-->
                         <?php if ($this->request->getSession()->read('Auth.User.id') === $comment->user_id): ?>
                             <?= $this->Form->postLink('削除する', ['controller' => 'Comments', 'action' => 'delete', $comment->id],
                                 ['confirm' => 'コメントを削除します。よろしいですか？'], ['class' => 'card-link']) ?>
@@ -50,6 +51,7 @@
         <?php if ($comments->count() >= \App\Controller\CommentsController::COMMENT_UPPER_LIMIT): ?>
             <p class="text-center">コメント数が上限に達しているためこれ以上コメントすることはできません</p>
         <?php else: ?>
+        <!-- ログイン中のユーザーのみ表示されるようにする。-->
             <?= $this->Form->create($newComment, ['url' => '/comments/add']) ?>
             <?php
             echo $this->Form->control('body', [

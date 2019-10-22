@@ -25,6 +25,7 @@ class UsersController extends AppController
      */
     public function add()
     {
+        // ログイン中のユーザー情報はAuthコンポーネントのuser()メソッドで取得できる。
         $user = $this->Users->newEntity();
         if ($this->request->is('post')) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
@@ -45,6 +46,7 @@ class UsersController extends AppController
      */
     public function edit()
     {
+        // ログイン中のユーザー情報はAuthコンポーネントのuser()メソッドで取得できる。今回は引数に取得したいキーを指定できるため、idを指定して、ユーザーのEntity情報を更新する。その後、save()メソッドで更新する。save()メソッドが新規登録(insert)をするか、更新(update)をするかはEntityのisNew()メソッドの戻り値によって決まる。先のget()メソッドの場合はisNew()メソッドがfalseになるため、ここでは更新処理が行われる。
         $user = $this->Users->get($this->Auth->user('id'));
         if ($this->request->is('put')) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
@@ -55,6 +57,7 @@ class UsersController extends AppController
 
                 return $this->redirect(['controller' => 'Questions', 'action' => 'index']);
             }
+            // 更新処理が成功した後は、ログイン時にセッションに書き込んだユーザー情報を更新する。最後は、質問一覧画面にリダイレクトさせる。
             $this->Flash->error('ユーザー情報の更新に失敗しました');
         }
         $this->set(compact('user'));
@@ -67,6 +70,7 @@ class UsersController extends AppController
      */
     public function password()
     {
+        // パスワード更新画面はパスワードを入力するだけで、現状のユーザー情報をセットする必要がないため、newEntity()メソッドを利用する。フォームのsubmit時のリクエストメソッドはPOSTメソッドになる。
         $user = $this->Users->newEntity();
         if ($this->request->is('post')) {
             $user = $this->Users->get($this->Auth->user('id'));
