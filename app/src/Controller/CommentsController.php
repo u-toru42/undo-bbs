@@ -14,7 +14,7 @@ class CommentsController extends AppController
     /**
      * {@inheritdoc}
      */
-    // AnswersControllerクラスのadd()アクションはQuestionsControllerクラスのaddアクションとは異なり、GETでアクセスする必要は無い。そのため、beforeFilter()メソッド内でallowMethod()を利用して、アクセス可能なHTTPのリクエストメソッドを限定する。
+    // CommentsControllerクラスのadd()アクションはQuestionsControllerクラスのaddアクションとは異なり、GETでアクセスする必要は無い。そのため、beforeFilter()メソッド内でallowMethod()を利用して、アクセス可能なHTTPのリクエストメソッドを限定する。
     public function beforeFilter(Event $event)
     {
         parent::beforeFilter($event);
@@ -40,7 +40,7 @@ class CommentsController extends AppController
 
             return $this->redirect(['controller' => 'Questions', 'action' => 'view', $comment->question_id]);
         }
-
+        // useridの値をログイン中のユーザーIDに設定。
         $comment->user_id = $this->Auth->user('id');
         if ($this->Comments->save($comment)) {
             $this->Flash->success('コメントを投稿しました');
@@ -59,8 +59,8 @@ class CommentsController extends AppController
      */
     public function delete(int $id)
     {
-        // まず始めにallowMethod()でPOSTだけのアクセスを受け入れるようにする。その後、指定されたIDの質問をget()メソッドで取得する。質問が存在しない場合は404エラーとなる。そして、取得した質問をdelete()メソッドで削除している。質問欄も同様。
-        $Comment = $this->Comments->get($id);
+        // まず始めにallowMethod()でPOSTだけのアクセスを受け入れるようにする。その後、指定されたIDの質問をget()メソッドで取得する。質問が存在しない場合は404エラーとなる。そして、取得した質問をdelete()メソッドで削除している。質問欄も同様。質問及びコメントの削除は本人しか削除できないようにする。
+        $comment = $this->Comments->get($id);
         $questionId = $Comment->question_id;
         if ($comment->user_id !== $this->Auth->user('id')) {
             $this->Flash->error('他のユーザーのコメントを削除することはできません');
