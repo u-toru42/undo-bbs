@@ -54,7 +54,7 @@
         },
         {
             "name": "cakephp/cakephp",
-            "version": "3.6.14",
+            "version": "3.6.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/cakephp.git",
@@ -1304,7 +1304,7 @@
                 "shasum": ""
             },
             "require": {
-                "cakephp/cakephp": "^3.6.12",
+                "cakephp/cakephp": "^3.6.15",
                 "cakephp/plugin-installer": "^1.0",
                 "php": ">=5.6.0",
                 "wyrihaximus/twig-view": "^4.3.4"
