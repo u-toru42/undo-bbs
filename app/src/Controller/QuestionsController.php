@@ -24,7 +24,7 @@ class QuestionsController extends AppController
      */
     public function index()
     {
-        // ここに処理を書いていく
+        // ここに処理を書いていく'
         // paginateメソッドはページング(ページ分割)された情報を取得するメソッド。
         $questions = $this->paginate($this->Questions->findQuestionsWithCommentedCount()->contain(['Users']), [
             'limit' => 3, 'order' => ['Questions.id' => 'DESC']

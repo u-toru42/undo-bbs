@@ -26,7 +26,6 @@ class QuestionsControllerTest extends IntegrationTestCase
      * Fixtures
      *
      * @var array
-     * questionsテーブルに加え、commentsテーブルとusersテーブルのデータも必要になるため、3つのフィクスチャーを書く。
      */
     public $fixtures = [
         'app.Comments',
@@ -36,7 +35,6 @@ class QuestionsControllerTest extends IntegrationTestCase
 
     /**
      * @inheritdoc
-     * setUp()メソッドはテストに必要なオブジェクトの初期化や設定を行う。setUp()メソッドはテストメソッドの実行前に毎回呼び出される。
      */
     public function setUp()
     {
@@ -48,7 +46,6 @@ class QuestionsControllerTest extends IntegrationTestCase
 
     /**
      * @inheritdoc
-     * tearDown()メソッドはテストメソッドの実行後に毎回呼び出される。
      */
     public function tearDown()
     {
