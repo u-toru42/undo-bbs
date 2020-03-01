@@ -14,14 +14,8 @@ workflows:
         MYSQL_DATABASE: root
         MYSQL_ROOT_PASSWORD: root
   steps:
-    - restore_cache:
-        key: cakephp3-circleci-example-{{ .Branch }}
     - checkout
     - run: composer install --dev --no-interaction
-    - save_cache:
-        key: cakephp3-circleci-example-{{ .Branch }}
-        paths:
-          - "/home/ubuntu/.composer/cache"
     - run:
         name: create test repot dir
         command: mkdir -p $CIRCLE_TEST_REPORTS/phpunit
