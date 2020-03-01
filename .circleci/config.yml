@@ -13,7 +13,12 @@ jobs:
             - DATABASE_PASS=root
             - DATABASE_NAME=qc_app
             - DATABASE_TEST_URL=mysql://root:secret@undo-bbs-db/test
-    steps:
-        - checkout
-        - run:
-          command: docker-compose up -d
+            steps:
+              - checkout
+              - run: composer install --dev --no-interaction
+              - run:
+                  name: Wait for MySQL DB
+                  command: dockerize -wait tcp://localhost:3306 -timeout 1m
+              - run:
+                  name: Initialize Database
+                  command: bin/cake migrations migrate
