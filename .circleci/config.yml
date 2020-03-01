@@ -1,9 +1,5 @@
 version: 2.1
 
-executors:
-  default:
-    working_directory: ~/app
-
 jobs:
   build:
     docker:
