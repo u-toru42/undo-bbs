@@ -14,13 +14,14 @@ workflows:
         MYSQL_DATABASE: root
         MYSQL_ROOT_PASSWORD: root
   steps:
+    - restore_cache:
+        key: cakephp3-circleci-example-{{ .Branch }}
     - checkout
-    - restore_cache: # `composer.lock` が変更されていない場合に、依存関係キャッシュを復元する特別なステップ
-    keys:
-    - composer-v1-{{ checksum "composer.lock" }}
-    # 正確な一致が見つからない場合は、最新のキャッシュの使用にフォールバックします (https://circleci.com/docs/ja/2.0/caching/ を参照)
-    - composer-v1-
-    - run: composer install -n --prefer-dist
+    - run: composer install --dev --no-interaction
+    - save_cache:
+        key: cakephp3-circleci-example-{{ .Branch }}
+        paths:
+          - "/home/ubuntu/.composer/cache"
     - run:
         name: create test repot dir
         command: mkdir -p $CIRCLE_TEST_REPORTS/phpunit
@@ -30,3 +31,4 @@ workflows:
     - run:
         name: Initialize Database
         command: bin/cake migrations migrate
+    - run: vendor/bin/phpunit --configuration phpunit.xml.dist --log-junit $CIRCLE_TEST_REPORTS/phpunit/junit.xml
