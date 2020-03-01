@@ -12,4 +12,3 @@ jobs:
         - checkout
         - run:
             name: undo-bbs
-            command: 'docker-compose up -d'
