@@ -5,9 +5,14 @@ jobs:
     docker:
         - image: php:7.2-apache
         - image: circleci/mysql:5.7
-          environment: 
-            MYSQL_DATABASE: "qc_app"
-            MYSQL_ROOT_PASSWORD: "root"
+          environment:
+            - APP_DEFAULT_LOCALE=ja_JP
+            - APP_DEFAULT_TIMEZONE=Asia/Tokyo
+            - DATABASE_HOST=undo-bbs-db
+            - DATABASE_USER=root
+            - DATABASE_PASS=root
+            - DATABASE_NAME=qc_app
+            - DATABASE_TEST_URL=mysql://root:secret@undo-bbs-db/test
     steps:
         - checkout
         - run:
