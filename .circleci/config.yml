@@ -3,7 +3,10 @@ jobs:
   build:
     docker:
         - image: php:7.2-apache
-        - image: mysql:5.7
+        - image: circleci/mysql:5.7
+          environment: 
+            MYSQL_DATABASE: "qc_app"
+            MYSQL_ROOT_PASSWORD: "root"
     working_directory: ~/app
     steps:
         - checkout
