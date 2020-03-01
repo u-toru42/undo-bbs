@@ -1,0 +1,15 @@
+workflows:
+  version: 2.1
+  workflows:
+  jobs:
+    build:
+      docker:
+          - image: circleci/php:7.2-apache
+          - image: circleci/mysql:5.7
+      working_directory: ~/work
+      steps:
+          - checkout
+          - run:
+              name: undo-bbs
+              command: 'docker-compose up -d'
+      shell: /bin/bash
