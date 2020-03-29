@@ -1,34 +1,20 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/php:7.2
+    steps:
+      - checkout
+      - run: bash -c "sh docker-init-setup.sh && apache2-foreground"
+  test:
+    docker:
+      - image: circleci/php:7.2
+    steps:
+      - checkout
+      - run: <command>
 workflows:
   version: 2
-  build-all:
+  build_and_test:
     jobs:
-      - build_php
-      - build_javascript
-  docker:
-    - image: tenkoma/php:7.2-apache-sample
-      environment:
-        DEBUG: true
-    - image: circleci/mysql:5.6
-      command: mysqld  --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
-      environment:
-        MYSQL_DATABASE: root
-        MYSQL_ROOT_PASSWORD: root
-  steps:
-    - restore_cache:
-        key: cakephp3-circleci-example-{{ .Branch }}
-    - checkout
-    - run: composer install --dev --no-interaction
-    - save_cache:
-        key: cakephp3-circleci-example-{{ .Branch }}
-        paths:
-          - "/home/ubuntu/.composer/cache"
-    - run:
-        name: create test repot dir
-        command: mkdir -p $CIRCLE_TEST_REPORTS/phpunit
-    - run:
-        name: Wait for MySQL DB
-        command: dockerize -wait tcp://localhost:3306 -timeout 1m
-    - run:
-        name: Initialize Database
-        command: bin/cake migrations migrate
-    - run: vendor/bin/phpunit --configuration phpunit.xml.dist --log-junit $CIRCLE_TEST_REPORTS/phpunit/junit.xml
+      - build
+      - test
